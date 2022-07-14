@@ -1,0 +1,85 @@
+<mat-card class="card">
+    <mat-toolbar>
+        <h1 class="headerText">QUESTION ANSWER APPLICATION</h1>
+    </mat-toolbar>
+    <button mat-raised-button color="primary" class="addsaveButton" (click)="addMoreQuestion()"
+        [disabled]="questions.length > 0">
+        <mat-icon>add</mat-icon> Add Question
+    </button>
+    <form>
+        <div [formGroup]="questionForm">
+            <div *ngFor="let item of questions.controls; let questionIndex=index;" formArrayName="questions">
+                <div [formGroupName]="questionIndex">
+                    <mat-card class="inner-card">
+                        <div class="row">
+                            <label class="col-sm-2 col-form-label">Question</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" formControlName="question">
+                                <p class="req" *ngIf="questions?.controls[questionIndex]?.get('question')?.touched
+                                && questions?.controls[questionIndex]?.get('question')?.errors?.['required']">
+                                    * Question is required
+                                </p>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Select Type</label>
+                            <div class="col-sm-3">
+                                <select class="form-select" formControlName="questionType" #questionType
+                                    (change)="changeQuestionType($event , questionIndex)">
+                                    <option *ngFor="let item of selectType" [value]="item.id">
+                                        <span>{{item.name}}</span>
+                                    </option>
+                                </select>
+                                <p class="req" *ngIf="questions?.controls[questionIndex]?.get('questionType')?.touched
+                                && questions?.controls[questionIndex]?.get('questionType')?.errors?.['required']">
+                                    * Question type is required
+                                </p>
+                            </div>
+                            <div class="col-sm-2">
+                                <mat-icon class="delete" (click)="deleteQuestion(questionIndex)">delete</mat-icon>
+                            </div>
+                        </div>
+                        <div *ngIf="questionType.value === 'radio-button'" class="radio">
+                            <mat-card class="radio-card">
+                                <div *ngFor="let item of answers(questionIndex).controls ; let ansIndex=index;"
+                                    formArrayName="answers">
+                                    <div [formGroupName]="ansIndex" class="radio">
+                                        <div class="row">
+                                            <label class="col-sm-3 col-form-label">Answer {{ansIndex}}</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control" formControlName="firstAnswer">
+                                                <p class="req" *ngIf=" answers(questionIndex)?.controls[ansIndex]?.get('firstAnswer')?.touched &&
+                                              answers(questionIndex)?.controls[ansIndex]?.get('firstAnswer')?.errors?.['required']
+                                        ">
+                                                    * Answer is required
+                                                </p>
+                                            </div>
+                                            <!-- *ngIf="answers(questionIndex).controls.length > 2" -->
+                                            <div class="col-sm-2" *ngIf="ansIndex > 1">
+                                                <mat-icon class="delete"
+                                                    (click)="deleteAnswer(questionIndex , ansIndex)">delete</mat-icon>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </mat-card>
+                            <button mat-raised-button color="accent" (click)="addMoreAnswer(questionIndex)">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <button mat-raised-button color="primary" class="addsaveButton" (click)="saveQuestion()">
+                <mat-icon>save</mat-icon>
+            </button>
+            <button mat-raised-button color="accent" (click)="addMoreQuestion()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </form>
+</mat-card>

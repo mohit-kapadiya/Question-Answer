@@ -1,0 +1,26 @@
+<mat-card class="card">
+    <mat-toolbar>
+        <h1 class="headerText">QUESTION FORM</h1>
+    </mat-toolbar>
+    <mat-card class="inner">
+        <div *ngFor="let question of questionAnsData?.questions;  let questionIndex=index;">
+            <h1 class="inner">
+                {{questionIndex+1}}. {{question?.question}}
+            </h1>
+            <div *ngIf="question?.questionType === 'long-text'" class="inner">
+                <textarea class="form-control"></textarea>
+            </div>
+            <div *ngIf="question?.questionType === 'short-text'" class="inner">
+                <input type="text" class="form-control">
+            </div>
+            <div *ngFor="let answer of question['answers'];">
+                <h4>
+                    <mat-radio-button value="1">{{answer?.firstAnswer}}</mat-radio-button>
+                </h4>
+            </div>
+        </div>
+    </mat-card>
+    <button mat-raised-button color="accent" class="button" (click)="backToForm()">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+</mat-card>
